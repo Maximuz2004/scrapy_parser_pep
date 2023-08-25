@@ -9,7 +9,10 @@ from .settings import BASE_DIR, RESULT_DIR, TIME_FORMAT
 
 FILE_SAVED_MESSAGE = 'Файл с результатами был сохранен: {}'
 NO_STATUS_ERROR_MESSAGE = 'Отсутствует статус PEP'
-FIELD_NAMES = ['Статус', 'Количество']
+STATUS_NAME = 'Статус'
+QUANTITY_NAME = 'Количество'
+TOTAL_NAME = 'Total'
+FIELD_NAMES = [STATUS_NAME, QUANTITY_NAME]
 FILE_NAME = 'status_summary_{}.csv'
 
 
@@ -33,7 +36,7 @@ class PepParsePipeline:
         now = datetime.now().strftime(TIME_FORMAT)
         file_path = self.result_dir / FILE_NAME.format(now)
         data_to_write = [
-            {FIELD_NAMES[0]: status, FIELD_NAMES[1]: count}
+            {STATUS_NAME: status, QUANTITY_NAME: count}
             for status, count in self.status_counts.items()
         ]
         with open(file_path, 'w', newline='', encoding='utf-8') as file:
@@ -46,8 +49,8 @@ class PepParsePipeline:
             writer.writerows(data_to_write)
             writer.writerow(
                 {
-                    FIELD_NAMES[0]: 'Total',
-                    FIELD_NAMES[1]: sum(self.status_counts.values())
+                    STATUS_NAME: TOTAL_NAME,
+                    QUANTITY_NAME: sum(self.status_counts.values())
                 }
             )
         spider.log(FILE_SAVED_MESSAGE.format(file_path))
