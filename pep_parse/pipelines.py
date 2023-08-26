@@ -3,7 +3,6 @@ from datetime import datetime
 import csv
 
 from itemadapter import ItemAdapter
-from scrapy.exceptions import DropItem
 
 from .settings import BASE_DIR, RESULT_DIR, TIME_FORMAT
 
